@@ -12,6 +12,6 @@ namespace ISApteka.Database.Models
         public int OrderId { get; set; }
         public int MedicineId { get; set; }
         public int Amount{ get; set; }
-        public float Cost{ get; set; }
+        public double Cost{ get; set; }
     }
 }

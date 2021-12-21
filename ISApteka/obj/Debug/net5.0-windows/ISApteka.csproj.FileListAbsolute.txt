@@ -27,4 +27,4 @@ C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISAp
 C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISApteka.FormMedicine.resources
 C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISApteka.FormMain.resources
 C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISApteka.FormOrder.resources
-C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISApteka.csproj.AssemblyReference.cache
+C:\Users\Артем\source\repos\ISApteka\ISApteka\obj\Debug\net5.0-windows\ISApteka.FormBrand.resources

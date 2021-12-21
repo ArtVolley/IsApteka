@@ -10,7 +10,8 @@ namespace ISApteka.Database.Models
     {
         public int Id { get; set; }
         public string Date { get; set; }
-        public float TotalCost{ get; set; }
+        public double TotalCost{ get; set; }
         public int IsPassed{ get; set; }
+        public int UserId { get; set; }
     }
 }

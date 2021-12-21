@@ -277,7 +277,7 @@ namespace ISApteka.Database
                     Brand.Id = Convert.ToInt32(reader["Id"]);
                     Brand.MedicineId = Convert.ToInt32(reader["MedicineId"]);
                     Brand.Amount = Convert.ToInt32(reader["Amount"]);
-                    Brand.Cost = Convert.ToSingle(reader["Cost"]);
+                    Brand.Cost = Convert.ToDouble(reader["Cost"]);
                     Brand.Place = reader["Place"].ToString();
                 }
                 return Brand;
@@ -309,7 +309,7 @@ namespace ISApteka.Database
                         Id = Convert.ToInt32(reader["Id"]),
                         MedicineId = Convert.ToInt32(reader["MedicineId"]),
                         Amount = Convert.ToInt32(reader["Amount"]),
-                        Cost = Convert.ToSingle(reader["Cost"]),
+                        Cost = Convert.ToDouble(reader["Cost"]),
                         Place = reader["Place"].ToString()
                     };
                     stores.Add(store);
@@ -360,6 +360,22 @@ namespace ISApteka.Database
         }
 
 
+        public async Task UpdateAmountStoreByMedicineIdIntoStore(int medicineId, int amount)
+        {
+            try
+            {
+                await ConnectDataBase();
+                string query = $"UPDATE dbo.Store SET Amount={amount} WHERE MedicineId={medicineId}";
+                SqlCommand command = new(query, Connection);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
         public async Task DeleteStoreByIdIntoStore(int id)
         {
             try
@@ -383,8 +399,8 @@ namespace ISApteka.Database
             {
                 var date = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy");
                 await ConnectDataBase();
-                string query = $"INSERT INTO dbo.Orders(Date,TotalCost,IsPassed) output INSERTED.ID " +
-                    $"VALUES('{date}',{order.TotalCost},{order.IsPassed})";
+                string query = $"INSERT INTO dbo.Orders(Date,TotalCost,IsPassed,UserId) output INSERTED.ID " +
+                    $"VALUES('{date}',{order.TotalCost.ToString().Replace(",", ".")},{order.IsPassed},{order.UserId})";
                 SqlCommand command = new(query, Connection);
                 var id = await command.ExecuteScalarAsync();
                 return (int)id;
@@ -403,8 +419,9 @@ namespace ISApteka.Database
                 var date = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy");
                 await ConnectDataBase();
                 string query = $"UPDATE dbo.Orders SET " +
-                    $"Date='{date}', TotalCost={order.TotalCost}, " +
-                    $"IsPassed={order.IsPassed} WHERE Id={order.Id}";
+                    $"Date='{date}', TotalCost={order.TotalCost.ToString().Replace(",", ".")}, " +
+                    $"IsPassed={order.IsPassed}, UserId={order.UserId} " +
+                    $"WHERE Id={order.Id}";
                 SqlCommand command = new(query, Connection);
                 await command.ExecuteNonQueryAsync();
             }
@@ -422,7 +439,7 @@ namespace ISApteka.Database
             {
                 await ConnectDataBase();
                 string query = $"INSERT INTO dbo.OrderInfo(OrderId,MedicineId,Amount,Cost) output INSERTED.ID " +
-                    $"VALUES({orderInfo.OrderId},{orderInfo.MedicineId},{orderInfo.Amount},{orderInfo.Cost})";
+                    $"VALUES({orderInfo.OrderId},{orderInfo.MedicineId},{orderInfo.Amount},{orderInfo.Cost.ToString().Replace(",", ".")})";
                 SqlCommand command = new(query, Connection);
                 var id = await command.ExecuteScalarAsync();
                 return (int)id;
@@ -441,7 +458,7 @@ namespace ISApteka.Database
                 await ConnectDataBase();
                 string query = $"UPDATE dbo.OrderInfo SET " +
                     $"MedicineId={orderInfo.MedicineId}, OrderId={orderInfo.OrderId}, " +
-                    $"Amount={orderInfo.Amount}, Cost={orderInfo.Cost} WHERE Id={orderInfo.Id}";
+                    $"Amount={orderInfo.Amount}, Cost={orderInfo.Cost.ToString().Replace(",", ".")} WHERE Id={orderInfo.Id}";
                 SqlCommand command = new(query, Connection);
                 await command.ExecuteNonQueryAsync();
             }

@@ -23,9 +23,10 @@ namespace ISApteka
         public FormAuth()
         {
             InitializeComponent();
-            Repository = new Repository();
 
+            Repository = new Repository();
             tePassword.UseSystemPasswordChar = true;
+
             buAuth.Click += BuAuth_Click;
         }
 
@@ -51,7 +52,7 @@ namespace ISApteka
 
         private void OpenCatalog()
         {
-            Application.Run(new FormMain(Repository));
+            Application.Run(new FormMain(User, Repository));
         }
 
     }

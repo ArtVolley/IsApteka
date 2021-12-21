@@ -18,19 +18,25 @@ namespace ISApteka
     public partial class FormCatalog : Form
     {
         private FormMain FormMain { get; set; }
+        private User User { get; set; }
         private FormOrder FormOrder { get; set; }
         private FormMedicine FormMedicine { get; set; }
-        private List<Store> Stores { get; set; }
         private List<MedicineCatalog> MedicineGrids { get; set; }
         private Repository Repository { get; set; }
-        private Mode Mode { get; set; }
+        private  Mode Mode { get; set; }
+
+        public List<Store> Stores { get; set; }
 
 
-        public FormCatalog(Repository repository, Mode mode)
+        public FormCatalog(User user, Repository repository, Mode mode)
         {
             InitializeComponent();
+
             Repository = repository;
+            User = user;
             Mode = mode;
+
+            // buttons
             if (Mode == Mode.Edit)
             {
                 buOrder.Visible = false;
@@ -38,17 +44,24 @@ namespace ISApteka
             else if (Mode == Mode.Read)
             {
                 buAdd.Visible = false;
+                buAddBrand.Visible = false;
             }
 
             Task.Run(() => this.GridParameters()).Wait();
             buOrder.Click += BuOrder_Click;
             buAdd.Click += BuAdd_Click;
+            buAddBrand.Click += BuAddBrand_Click;
             FormClosed += FormCatalog_FormClosed;
+        }
+
+        private void BuAddBrand_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void BuAdd_Click(object sender, EventArgs e)
         {
-            FormMedicine = new FormMedicine(Repository, this, 0, Stores, Mode.Add);
+            FormMedicine = new FormMedicine(User, Repository, this, 0, Mode.Add);
             FormMedicine.Show();
         }
 
@@ -74,7 +87,7 @@ namespace ISApteka
             }
             else
             {
-                FormOrder = new FormOrder(Repository, this, addedStores, addedMedicines);
+                FormOrder = new FormOrder(User, Repository, this, addedMedicines);
                 FormOrder.Show();
             }
         }
@@ -91,7 +104,6 @@ namespace ISApteka
             dataGridMedicines.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridMedicines.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridMedicines.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            //dataGridMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.;
             dataGridMedicines.GridColor = Color.White;
 
             await DataBinding();
@@ -128,9 +140,7 @@ namespace ISApteka
             buGo.DefaultCellStyle.BackColor = Color.Black;
             buGo.DefaultCellStyle.ForeColor = Color.White;
             buGo.UseColumnTextForButtonValue = true;
-            dataGridMedicines.Columns.Add(buGo);
-
-            //dataGridMedicines.Columns["buGo"].Width = 50;
+            dataGridMedicines.Columns.Add(buGo);            
 
 
             dataGridMedicines.Columns["Id"].Visible = false;
@@ -199,7 +209,7 @@ namespace ISApteka
             {
                 // get id from this row
                 int medicineId = Convert.ToInt32(dataGridMedicines.Rows[e.RowIndex].Cells[1].Value);
-                FormMedicine = new FormMedicine(Repository, this, medicineId, Stores, Mode);
+                FormMedicine = new FormMedicine(User, Repository, this, medicineId, Mode);
                 FormMedicine.Show();
             }
         }
@@ -208,7 +218,7 @@ namespace ISApteka
         // closed
         private void FormCatalog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            FormMain = new FormMain(Repository);
+            FormMain = new FormMain(User, Repository);
             this.Hide();
             FormMain.Show();
         }

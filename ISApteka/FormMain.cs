@@ -1,4 +1,5 @@
 ﻿using ISApteka.Database;
+using ISApteka.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,12 +17,15 @@ namespace ISApteka
     {
         private FormCatalog FormCatalog { get; set; }
         private Repository Repository { get; set; }
+        private User User { get; set; }
 
 
-        public FormMain(Repository repository)
+        public FormMain(User user, Repository repository)
         {
             InitializeComponent();
+
             Repository = repository;
+            User = user;
 
             buCatalog.Click += BuCatalog_Click;
             buEdit.Click += BuEdit_Click;
@@ -30,7 +34,7 @@ namespace ISApteka
 
         private void BuEdit_Click(object sender, EventArgs e)
         {
-            FormCatalog = new FormCatalog(Repository, Mode.Edit);
+            FormCatalog = new FormCatalog(User, Repository, Mode.Edit);
             this.Hide();
             FormCatalog.Show();
         }
@@ -43,7 +47,7 @@ namespace ISApteka
         
         private void BuCatalog_Click(object sender, EventArgs e)
         {
-            FormCatalog = new FormCatalog(Repository, Mode.Read);
+            FormCatalog = new FormCatalog(User, Repository, Mode.Read);
             this.Hide();
             FormCatalog.Show();
         }

@@ -17,6 +17,7 @@ namespace ISApteka
     public partial class FormMedicine : Form
     {
         private FormCatalog FormCatalog { get; set; }
+        private User User { get; set; }
         private Medicine Medicine { get; set; }
         private List<Store> Stores { get; set; }
         private List<Brand> Brands { get; set; }
@@ -25,15 +26,18 @@ namespace ISApteka
         private int MedicineId { get; set; }
 
 
-        public FormMedicine(Repository repository, FormCatalog formCatalog, int medicineId, List<Store> stores, Mode mode)
+        public FormMedicine(User user, Repository repository, FormCatalog formCatalog, int medicineId, Mode mode)
         {
             InitializeComponent();
 
             Repository = repository;
             FormCatalog = formCatalog;
-            Stores = stores;
+            User = user;
+            Stores = formCatalog.Stores;
             Mode = mode;
             MedicineId = medicineId;
+            
+            //  buttons
             if (Mode == Mode.Read)
             {
                 buConfirm.Visible = false;
@@ -94,7 +98,7 @@ namespace ISApteka
             {
                 MedicineId = medicineId,
                 Amount = Convert.ToInt32(teTotal.Text),
-                Cost = Convert.ToSingle(teCost.Text.Replace(".", ",")),
+                Cost = Convert.ToDouble(teCost.Text.Replace(".", ",")),
                 Place = tePlace.Text
             };
             await Repository.UpdateStoreByMedicineIdIntoStore(store);
@@ -122,7 +126,7 @@ namespace ISApteka
             {
                 MedicineId = id,
                 Amount = Convert.ToInt32(teTotal.Text),
-                Cost = Convert.ToSingle(teCost.Text.Replace(".",",")),
+                Cost = Convert.ToDouble(teCost.Text.Replace(".",",")),
                 Place = tePlace.Text
             };
             await Repository.CreateStoreIntoStore(store);
