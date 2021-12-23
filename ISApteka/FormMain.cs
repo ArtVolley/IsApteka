@@ -16,6 +16,7 @@ namespace ISApteka
     public partial class FormMain : Form
     {
         private FormCatalog FormCatalog { get; set; }
+        private FormAdmin FormAdmin { get; set; }
         private Repository Repository { get; set; }
         private User User { get; set; }
 
@@ -26,10 +27,26 @@ namespace ISApteka
 
             Repository = repository;
             User = user;
+            if (user.Role != Role.Admin)
+            {
+                buAdmin.Visible = false;
+            }
+            if (user.Role == Role.Pharmacist)
+            {
+                buEdit.Visible = false;
+            }
 
             buCatalog.Click += BuCatalog_Click;
             buEdit.Click += BuEdit_Click;
+            buAdmin.Click += BuAdmin_Click;
             FormClosed += FormMain_FormClosed;
+        }
+
+        private void BuAdmin_Click(object sender, EventArgs e)
+        {
+            FormAdmin = new FormAdmin(User, Repository);
+            this.Hide();
+            FormAdmin.Show();
         }
 
         private void BuEdit_Click(object sender, EventArgs e)

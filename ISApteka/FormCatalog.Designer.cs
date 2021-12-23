@@ -32,7 +32,6 @@ namespace ISApteka
             this.dataGridMedicines = new System.Windows.Forms.DataGridView();
             this.buOrder = new System.Windows.Forms.Button();
             this.buAdd = new System.Windows.Forms.Button();
-            this.buAddBrand = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMedicines)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,24 +75,12 @@ namespace ISApteka
             this.buAdd.Text = "ДОБАВИТЬ ЛС";
             this.buAdd.UseVisualStyleBackColor = true;
             // 
-            // buAddBrand
-            // 
-            this.buAddBrand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buAddBrand.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buAddBrand.Location = new System.Drawing.Point(12, 540);
-            this.buAddBrand.Name = "buAddBrand";
-            this.buAddBrand.Size = new System.Drawing.Size(133, 47);
-            this.buAddBrand.TabIndex = 3;
-            this.buAddBrand.Text = "ДОБАВИТЬ БРЕНД";
-            this.buAddBrand.UseVisualStyleBackColor = true;
-            // 
             // FormCatalog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1194, 599);
-            this.Controls.Add(this.buAddBrand);
             this.Controls.Add(this.buAdd);
             this.Controls.Add(this.buOrder);
             this.Controls.Add(this.dataGridMedicines);
@@ -111,6 +98,5 @@ namespace ISApteka
         private System.Windows.Forms.DataGridView dataGridMedicines;
         private System.Windows.Forms.Button buOrder;
         private System.Windows.Forms.Button buAdd;
-        private System.Windows.Forms.Button buAddBrand;
     }
 }

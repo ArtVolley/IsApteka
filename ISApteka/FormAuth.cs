@@ -34,7 +34,7 @@ namespace ISApteka
         // bu auth click 
         private async void BuAuth_Click(object sender, EventArgs e)
         {
-            User = await Repository.GetUserByLoginAndPasswodInUsers(teLogin.Text, tePassword.Text);
+            User = await Repository.GetByLoginAndPasswodFromUsers(teLogin.Text, tePassword.Text);
             if (User == null)
             {
                 MessageBox.Show("Неверный логин или пароль!");

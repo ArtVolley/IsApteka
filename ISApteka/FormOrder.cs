@@ -73,11 +73,11 @@ namespace ISApteka
                         orderInfo.Amount = medicineGrid.Amount;
                         orderInfo.Cost = medicineGrid.Cost;
                     }
-                    await Repository.UpdateOrderInfoIntoOrderInfo(orderInfo);
+                    await Repository.UpdateIntoOrderInfo(orderInfo);
                 }
                 // amount in store
                 var newAmount = medicineGrid.TotalAmount - medicineGrid.Amount;
-                await Repository.UpdateAmountStoreByMedicineIdIntoStore(medicineGrid.Id, newAmount);
+                await Repository.UpdateAmountByMedicineIdIntoStore(medicineGrid.Id, newAmount);
             }
             // update order
             var order = new Order()
@@ -87,7 +87,7 @@ namespace ISApteka
                 IsPassed = 1,
                 UserId = User.Id
             };
-            await Repository.UpdateOrderIntoOrders(order);
+            await Repository.UpdateIntoOrders(order);
         }
 
 
@@ -106,7 +106,7 @@ namespace ISApteka
                 IsPassed = 0,
                 UserId = User.Id
             };
-            OrderId = await Repository.CreateOrderIntoOrders(order);
+            OrderId = await Repository.CreateIntoOrders(order);
             // push orderInfo
             foreach (var medicineGrid in MedicineGrids)
             {
@@ -117,7 +117,7 @@ namespace ISApteka
                     Amount = medicineGrid.Amount,
                     Cost = medicineGrid.Cost
                 };
-                int id = await Repository.CreateOrderInfoIntoOrderInfo(orderInfo);
+                int id = await Repository.CreateIntoOrderInfo(orderInfo);
                 orderInfo.Id = id;
                 OrderInfos.Add(orderInfo);
             }

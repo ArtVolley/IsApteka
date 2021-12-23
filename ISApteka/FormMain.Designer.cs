@@ -48,20 +48,20 @@ namespace ISApteka
             // buEdit
             // 
             this.buEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buEdit.Location = new System.Drawing.Point(122, 123);
+            this.buEdit.Location = new System.Drawing.Point(122, 189);
             this.buEdit.Name = "buEdit";
             this.buEdit.Size = new System.Drawing.Size(151, 36);
-            this.buEdit.TabIndex = 1;
+            this.buEdit.TabIndex = 2;
             this.buEdit.Text = "РЕДАКТИРОВАНИЕ ЛС";
             this.buEdit.UseVisualStyleBackColor = true;
             // 
             // buReport
             // 
             this.buReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buReport.Location = new System.Drawing.Point(122, 191);
+            this.buReport.Location = new System.Drawing.Point(122, 125);
             this.buReport.Name = "buReport";
             this.buReport.Size = new System.Drawing.Size(151, 36);
-            this.buReport.TabIndex = 2;
+            this.buReport.TabIndex = 1;
             this.buReport.Text = "СОСТАВИТЬ ОТЧЕТ";
             this.buReport.UseVisualStyleBackColor = true;
             // 

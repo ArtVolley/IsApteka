@@ -29,13 +29,13 @@ namespace ISApteka.Database
         }
 
 
-        // Users
-        public async Task<User> GetUserByLoginAndPasswodInUsers(string login, string password)
+        #region Users
+        public async Task<User> GetByLoginAndPasswodFromUsers(string login, string password)
         {
             try
             {
                 await ConnectDataBase();
-                User User = new();
+                User user = new();
                 string query = $"select * from dbo.Users where Login = '{login}' and Password = '{password}'";
                 SqlCommand command = new(query, Connection);
                 SqlDataReader reader = await command.ExecuteReaderAsync();
@@ -45,15 +45,16 @@ namespace ISApteka.Database
                 }
                 while (await reader.ReadAsync())
                 {
-                    User.Id = Convert.ToInt32(reader["Id"]);
-                    User.Login = reader["Login"].ToString();
-                    User.Password = reader["Password"].ToString();
-                    User.Role = (Role)Convert.ToInt32(reader["Role"]);
-                    User.Phone = reader["Phone"].ToString();
-                    User.Email = reader["Email"].ToString();
-                    User.Birth = reader["Birth"].ToString();
+                    user.Id = Convert.ToInt32(reader["Id"]);
+                    user.Login = reader["Login"].ToString();
+                    user.Password = reader["Password"].ToString();
+                    user.Role = (Role)Convert.ToInt32(reader["Role"]);
+                    user.Name = reader["Name"].ToString();
+                    user.Phone = reader["Phone"].ToString();
+                    user.Email = reader["Email"].ToString();
+                    user.Birth = reader["Birth"].ToString();
                 }
-                return User;
+                return user;
             }
             catch (Exception ex)
             {
@@ -62,7 +63,97 @@ namespace ISApteka.Database
         }
 
 
-        // Medicines
+        public async Task<List<User>> GetAllFromUsers()
+        {
+            try
+            {
+                await ConnectDataBase();
+                List<User> users = new();
+                string query = $"select * from dbo.Users";
+                SqlCommand command = new(query, Connection);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows == false)
+                {
+                    return users;
+                }
+                while (await reader.ReadAsync())
+                {
+                    User user = new()
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        Login = reader["Login"].ToString(),
+                        Password = reader["Password"].ToString(),
+                        Role = (Role)Convert.ToInt32(reader["Role"]),
+                        Name = reader["Name"].ToString(),
+                        Phone = reader["Phone"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        Birth = reader["Birth"].ToString()
+                    };
+                    users.Add(user);
+                }
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task UpdateByIdIntoUsers(User user)
+        {
+            try
+            {
+                await ConnectDataBase();
+                string query = $"UPDATE dbo.Users SET Login='{user.Login}', Password='{user.Password}', Role={(int)user.Role}," +
+                    $"Name='{user.Name}', Phone='{user.Phone}', Email='{user.Email}', Birth='{user.Birth}'" +
+                    $"WHERE Id={user.Id}";
+                SqlCommand command = new(query, Connection);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task<int> CreateIntoUsers(User user)
+        {
+            try
+            {
+                await ConnectDataBase();
+                string query = $"INSERT INTO dbo.Users(Login,Password,Role,Name,Phone,Email,Birth) output INSERTED.ID " +
+                    $"VALUES('{user.Login}','{user.Password}',{(int)user.Role},'{user.Name}','{user.Phone}','{user.Email}','{user.Birth}')";
+                SqlCommand command = new(query, Connection);
+                var id = await command.ExecuteScalarAsync();
+                return (int)id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task DeleteByIdIntoUsers(int id)
+        {
+            try
+            {
+                await ConnectDataBase();
+                string query = $"delete from dbo.Users where id={id}";
+                SqlCommand command = new(query, Connection);
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        #endregion
+
+
+        #region Medicines
         public async Task<List<Medicine>> GetAllFromMedicines()
         {
             try
@@ -103,7 +194,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task<Medicine> GetMedicineByIdFromMedicines(int medicineId)
+        public async Task<Medicine> GetByIdFromMedicines(int medicineId)
         {
             try
             {
@@ -139,7 +230,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task<int> CreateMedicineIntoMedicines(Medicine medicine)
+        public async Task<int> CreateIntoMedicines(Medicine medicine)
         {
             try
             {
@@ -158,7 +249,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task UpdateMedicineByIdIntoMedicines(Medicine medicine)
+        public async Task UpdateByIdIntoMedicines(Medicine medicine)
         {
             try
             {
@@ -178,7 +269,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task DeleteMedicineByIdIntoMedicines(int id)
+        public async Task DeleteByIdIntoMedicines(int id)
         {
             try
             {
@@ -192,10 +283,11 @@ namespace ISApteka.Database
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
 
-        // Brands
-        public async Task<Brand> GetBrandByIdInBrands(int id)
+        #region Brands
+        public async Task<Brand> GetByIdFromBrands(int id)
         {
             try
             {
@@ -256,10 +348,11 @@ namespace ISApteka.Database
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
 
-        // Store
-        public async Task<Store> GetStoreByMedicineIdFromStore(int medicineId)
+        #region Store
+        public async Task<Store> GetByMedicineIdFromStore(int medicineId)
         {
             try
             {
@@ -324,7 +417,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task<int> CreateStoreIntoStore(Store store)
+        public async Task<int> CreateIntoStore(Store store)
         {
             try
             {
@@ -342,7 +435,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task UpdateStoreByMedicineIdIntoStore(Store store)
+        public async Task UpdateByMedicineIdIntoStore(Store store)
         {
             try
             {
@@ -360,7 +453,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task UpdateAmountStoreByMedicineIdIntoStore(int medicineId, int amount)
+        public async Task UpdateAmountByMedicineIdIntoStore(int medicineId, int amount)
         {
             try
             {
@@ -376,7 +469,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task DeleteStoreByIdIntoStore(int id)
+        public async Task DeleteByIdIntoStore(int id)
         {
             try
             {
@@ -390,10 +483,11 @@ namespace ISApteka.Database
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
 
-        // Order
-        public async Task<int> CreateOrderIntoOrders(Order order)
+        #region Orders
+        public async Task<int> CreateIntoOrders(Order order)
         {
             try
             {
@@ -412,7 +506,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task UpdateOrderIntoOrders(Order order)
+        public async Task UpdateIntoOrders(Order order)
         {
             try
             {
@@ -430,10 +524,11 @@ namespace ISApteka.Database
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
 
-        // OrderInfo
-        public async Task<int> CreateOrderInfoIntoOrderInfo(OrderInfo orderInfo)
+        #region OrderInfo
+        public async Task<int> CreateIntoOrderInfo(OrderInfo orderInfo)
         {
             try
             {
@@ -451,7 +546,7 @@ namespace ISApteka.Database
         }
 
 
-        public async Task UpdateOrderInfoIntoOrderInfo(OrderInfo orderInfo)
+        public async Task UpdateIntoOrderInfo(OrderInfo orderInfo)
         {
             try
             {
@@ -467,5 +562,6 @@ namespace ISApteka.Database
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
     }
 }

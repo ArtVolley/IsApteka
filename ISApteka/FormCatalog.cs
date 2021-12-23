@@ -44,20 +44,14 @@ namespace ISApteka
             else if (Mode == Mode.Read)
             {
                 buAdd.Visible = false;
-                buAddBrand.Visible = false;
             }
 
             Task.Run(() => this.GridParameters()).Wait();
             buOrder.Click += BuOrder_Click;
             buAdd.Click += BuAdd_Click;
-            buAddBrand.Click += BuAddBrand_Click;
             FormClosed += FormCatalog_FormClosed;
         }
 
-        private void BuAddBrand_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void BuAdd_Click(object sender, EventArgs e)
         {
@@ -168,7 +162,7 @@ namespace ISApteka
             // convert medicines that have store
             foreach (var store in Stores)
             {
-                var medicine = await Repository.GetMedicineByIdFromMedicines(store.MedicineId);
+                var medicine = await Repository.GetByIdFromMedicines(store.MedicineId);
                 MedicineCatalog medicineCatalog = new()
                 {
                     Id = medicine.Id,
@@ -180,7 +174,7 @@ namespace ISApteka
                 // brand info
                 if (medicine.BrandId != null)
                 {
-                    Brand brand = await Repository.GetBrandByIdInBrands(medicine.BrandId.Value);
+                    Brand brand = await Repository.GetByIdFromBrands(medicine.BrandId.Value);
                     medicineCatalog.Brand = brand.Name;
                 }
                 // store info

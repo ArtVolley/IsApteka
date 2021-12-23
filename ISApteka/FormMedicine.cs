@@ -41,6 +41,7 @@ namespace ISApteka
             if (Mode == Mode.Read)
             {
                 buConfirm.Visible = false;
+                buDelete.Visible = false;
             }
             if (Mode == Mode.Add)
             {
@@ -55,8 +56,8 @@ namespace ISApteka
 
         private async void BuDelete_Click(object sender, EventArgs e)
         {
-            await Repository.DeleteStoreByIdIntoStore(MedicineId);
-            await Repository.DeleteMedicineByIdIntoMedicines(MedicineId);
+            await Repository.DeleteByIdIntoStore(MedicineId);
+            await Repository.DeleteByIdIntoMedicines(MedicineId);
             await FormCatalog.DataBinding();
             this.Hide();
         }
@@ -93,7 +94,7 @@ namespace ISApteka
             };
 
 
-            await Repository.UpdateMedicineByIdIntoMedicines(Medicine);
+            await Repository.UpdateByIdIntoMedicines(Medicine);
             Store store = new()
             {
                 MedicineId = medicineId,
@@ -101,7 +102,7 @@ namespace ISApteka
                 Cost = Convert.ToDouble(teCost.Text.Replace(".", ",")),
                 Place = tePlace.Text
             };
-            await Repository.UpdateStoreByMedicineIdIntoStore(store);
+            await Repository.UpdateByMedicineIdIntoStore(store);
         }
 
 
@@ -121,7 +122,7 @@ namespace ISApteka
             };
 
             
-            var id = await Repository.CreateMedicineIntoMedicines(Medicine);
+            var id = await Repository.CreateIntoMedicines(Medicine);
             Store store = new()
             {
                 MedicineId = id,
@@ -129,7 +130,7 @@ namespace ISApteka
                 Cost = Convert.ToDouble(teCost.Text.Replace(".",",")),
                 Place = tePlace.Text
             };
-            await Repository.CreateStoreIntoStore(store);
+            await Repository.CreateIntoStore(store);
         }
 
 
@@ -151,7 +152,7 @@ namespace ISApteka
                 if (Mode != Mode.Add)
                 {
                     Medicine = new();
-                    Medicine = await Repository.GetMedicineByIdFromMedicines(medicineId);
+                    Medicine = await Repository.GetByIdFromMedicines(medicineId);
                     // data from Medicines
                     teName.Text = Medicine.Name;
                     teAmount.Text = Medicine.Amount;
@@ -184,7 +185,7 @@ namespace ISApteka
                     // data from Brands
                     if (Medicine.BrandId != null)
                     {
-                        Brand selectedBrand = await Repository.GetBrandByIdInBrands(Medicine.BrandId.Value);
+                        Brand selectedBrand = await Repository.GetByIdFromBrands(Medicine.BrandId.Value);
                         coBrand.SelectedItem = new Item() { Text = selectedBrand.Name, Value = selectedBrand.Id };
                         foreach (var item in coBrand.Items)
                         {

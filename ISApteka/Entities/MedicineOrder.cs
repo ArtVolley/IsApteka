@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ISApteka.Entities
 {
-    class MedicineOrder
+    public class MedicineOrder
     {
         public int Id { get; set; }
         public string Name { get; set; }
