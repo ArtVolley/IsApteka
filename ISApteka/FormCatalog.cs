@@ -22,6 +22,7 @@ namespace ISApteka
         private FormOrder FormOrder { get; set; }
         private FormMedicine FormMedicine { get; set; }
         private List<MedicineCatalog> MedicineGrids { get; set; }
+        private DataTable DataTable { get; set; } = new();
         private Repository Repository { get; set; }
         private  Mode Mode { get; set; }
 
@@ -50,41 +51,24 @@ namespace ISApteka
             buOrder.Click += BuOrder_Click;
             buAdd.Click += BuAdd_Click;
             buSearch.Click += BuSearch_Click;
+            teSearch.KeyDown += TeSearch_KeyDown;
             FormClosed += FormCatalog_FormClosed;
         }
 
-        private void BuSearch_Click(object sender, EventArgs e)
+        private void TeSearch_KeyDown(object sender, KeyEventArgs e)
         {
-            string searchValue = teSearch.Text;
-            dataGridMedicines.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            try
+            if (e.KeyCode == Keys.Enter)
             {
-                bool valueResult = false;
-                foreach (DataGridViewRow row in dataGridMedicines.Rows)
-                {
-                    for (int i = 0; i < row.Cells.Count; i++)
-                    {
-                        if (row.Cells[i].Value != null && row.Cells[i].Value.ToString().Equals(searchValue))
-                        {
-                            int rowIndex = row.Index;
-                            dataGridMedicines.Rows[rowIndex].Selected = true;
-                            valueResult = true;
-                            break;
-                        }
-                    }
-
-                }
-                if (!valueResult)
-                {
-                    MessageBox.Show("Unable to find " + teSearch.Text, "Not Found");
-                    return;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
+                BuSearch_Click(sender, e);
             }
         }
+
+
+        private void BuSearch_Click(object sender, EventArgs e)
+        {
+            DataTable.DefaultView.RowFilter = string.Format("[{0}] LIKE '%{1}%'", "Name", teSearch.Text);
+        }
+
 
         private void BuAdd_Click(object sender, EventArgs e)
         {
@@ -97,15 +81,12 @@ namespace ISApteka
         private void BuOrder_Click(object sender, EventArgs e)
         {
             List<MedicineCatalog> addedMedicines = new();
-            List<Store> addedStores = new();
-            // find added medicines and stores
-            foreach (var medicineGrid in MedicineGrids)
-            {
-                if (medicineGrid.IsAdded == true)
+            // find added medicines
+            for (int i = 0; i < DataTable.Rows.Count; i++)
+            {            
+                if (Convert.ToBoolean(DataTable.Rows[i].ItemArray[6].ToString()) == true)
                 {
-                    var addStore = Stores.Find(x => x.MedicineId == medicineGrid.Id);
-                    addedMedicines.Add(medicineGrid);
-                    addedStores.Add(addStore);
+                    addedMedicines.Add(MedicineGrids[i]);                    
                 }
             }
             if (addedMedicines.Count < 1)
@@ -223,8 +204,29 @@ namespace ISApteka
                 MedicineGrids.Add(medicineCatalog);
             }
 
+            DataTable.Columns.Add("Id", typeof(int));
+            DataTable.Columns.Add("Name", typeof(string));
+            DataTable.Columns.Add("Brand", typeof(string));
+            DataTable.Columns.Add("Description", typeof(string));
+            DataTable.Columns.Add("IsPrescription", typeof(bool));
+            DataTable.Columns.Add("Amount", typeof(int));
+            DataTable.Columns.Add("IsAdded", typeof(bool));
+
+            foreach (var medicineGrid in MedicineGrids)
+            {
+                DataTable.Rows.Add(new object[] { 
+                    medicineGrid.Id, 
+                    medicineGrid.Name,
+                    medicineGrid.Brand,
+                    medicineGrid.Description,
+                    medicineGrid.IsPrescription,
+                    medicineGrid.Amount,
+                    medicineGrid.IsAdded,
+                });
+            }
+
             // push data to grid
-            dataGridMedicines.DataSource = MedicineGrids;
+            dataGridMedicines.DataSource = DataTable;
         }
 
 
