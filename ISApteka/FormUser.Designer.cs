@@ -81,18 +81,18 @@ namespace ISApteka
             this.laPass.AutoSize = true;
             this.laPass.Location = new System.Drawing.Point(15, 44);
             this.laPass.Name = "laPass";
-            this.laPass.Size = new System.Drawing.Size(50, 15);
+            this.laPass.Size = new System.Drawing.Size(58, 15);
             this.laPass.TabIndex = 28;
-            this.laPass.Text = "Пароль:";
+            this.laPass.Text = "Пароль: *";
             // 
             // laLogin
             // 
             this.laLogin.AutoSize = true;
             this.laLogin.Location = new System.Drawing.Point(15, 15);
             this.laLogin.Name = "laLogin";
-            this.laLogin.Size = new System.Drawing.Size(43, 15);
+            this.laLogin.Size = new System.Drawing.Size(51, 15);
             this.laLogin.TabIndex = 27;
-            this.laLogin.Text = "Логин:";
+            this.laLogin.Text = "Логин: *";
             // 
             // tePass
             // 
@@ -131,9 +131,9 @@ namespace ISApteka
             this.laName.AutoSize = true;
             this.laName.Location = new System.Drawing.Point(15, 102);
             this.laName.Name = "laName";
-            this.laName.Size = new System.Drawing.Size(37, 15);
+            this.laName.Size = new System.Drawing.Size(45, 15);
             this.laName.TabIndex = 33;
-            this.laName.Text = "ФИО:";
+            this.laName.Text = "ФИО: *";
             // 
             // teEmail
             // 

@@ -125,9 +125,9 @@ namespace ISApteka
             this.laName.AutoSize = true;
             this.laName.Location = new System.Drawing.Point(14, 15);
             this.laName.Name = "laName";
-            this.laName.Size = new System.Drawing.Size(91, 15);
+            this.laName.Size = new System.Drawing.Size(99, 15);
             this.laName.TabIndex = 8;
-            this.laName.Text = "Наименование:";
+            this.laName.Text = "Наименование: *";
             // 
             // label1
             // 
@@ -143,9 +143,9 @@ namespace ISApteka
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 73);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 15);
+            this.label2.Size = new System.Drawing.Size(55, 15);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Форма:";
+            this.label2.Text = "Форма: *";
             // 
             // label3
             // 
@@ -211,9 +211,9 @@ namespace ISApteka
             this.laTotal.AutoSize = true;
             this.laTotal.Location = new System.Drawing.Point(13, 564);
             this.laTotal.Name = "laTotal";
-            this.laTotal.Size = new System.Drawing.Size(127, 15);
+            this.laTotal.Size = new System.Drawing.Size(135, 15);
             this.laTotal.TabIndex = 18;
-            this.laTotal.Text = "Количество на складе:";
+            this.laTotal.Text = "Количество на складе: *";
             // 
             // teCost
             // 
@@ -227,9 +227,9 @@ namespace ISApteka
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(13, 593);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 15);
+            this.label6.Size = new System.Drawing.Size(46, 15);
             this.label6.TabIndex = 20;
-            this.label6.Text = "Цена:";
+            this.label6.Text = "Цена: *";
             // 
             // buConfirm
             // 

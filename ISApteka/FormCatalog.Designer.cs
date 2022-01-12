@@ -32,6 +32,8 @@ namespace ISApteka
             this.dataGridMedicines = new System.Windows.Forms.DataGridView();
             this.buOrder = new System.Windows.Forms.Button();
             this.buAdd = new System.Windows.Forms.Button();
+            this.teSearch = new System.Windows.Forms.TextBox();
+            this.buSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMedicines)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,12 +77,32 @@ namespace ISApteka
             this.buAdd.Text = "ДОБАВИТЬ ЛС";
             this.buAdd.UseVisualStyleBackColor = true;
             // 
+            // teSearch
+            // 
+            this.teSearch.Location = new System.Drawing.Point(13, 555);
+            this.teSearch.Name = "teSearch";
+            this.teSearch.Size = new System.Drawing.Size(224, 23);
+            this.teSearch.TabIndex = 3;
+            // 
+            // buSearch
+            // 
+            this.buSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buSearch.Location = new System.Drawing.Point(243, 540);
+            this.buSearch.Name = "buSearch";
+            this.buSearch.Size = new System.Drawing.Size(133, 47);
+            this.buSearch.TabIndex = 4;
+            this.buSearch.Text = "ПОИСК";
+            this.buSearch.UseVisualStyleBackColor = true;
+            // 
             // FormCatalog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1194, 599);
+            this.Controls.Add(this.buSearch);
+            this.Controls.Add(this.teSearch);
             this.Controls.Add(this.buAdd);
             this.Controls.Add(this.buOrder);
             this.Controls.Add(this.dataGridMedicines);
@@ -91,6 +113,7 @@ namespace ISApteka
             this.Text = "КАТАЛОГ ЛЕКАРСТВЕННЫХ СРЕДСТВ";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMedicines)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -98,5 +121,7 @@ namespace ISApteka
         private System.Windows.Forms.DataGridView dataGridMedicines;
         private System.Windows.Forms.Button buOrder;
         private System.Windows.Forms.Button buAdd;
+        private System.Windows.Forms.TextBox teSearch;
+        private System.Windows.Forms.Button buSearch;
     }
 }

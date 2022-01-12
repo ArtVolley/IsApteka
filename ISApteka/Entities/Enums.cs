@@ -27,5 +27,11 @@ namespace ISApteka.Entities
             True,
             False
         }
+
+        public enum ReportType
+        {
+            General,
+            Month
+        }
     }
 }

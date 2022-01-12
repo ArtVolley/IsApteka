@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace ISApteka
     {
         private FormCatalog FormCatalog { get; set; }
         private FormAdmin FormAdmin { get; set; }
+        private FormReports FormReports{ get; set; }
         private Repository Repository { get; set; }
         private User User { get; set; }
 
@@ -37,11 +40,21 @@ namespace ISApteka
             }
 
             buCatalog.Click += BuCatalog_Click;
+            buReport.Click += BuReport_Click;
             buEdit.Click += BuEdit_Click;
             buAdmin.Click += BuAdmin_Click;
             FormClosed += FormMain_FormClosed;
         }
 
+
+        private void BuReport_Click(object sender, EventArgs e)
+        {
+            FormReports = new FormReports(User, Repository);
+            this.Hide();
+            FormReports.Show();
+        }
+
+        
         private void BuAdmin_Click(object sender, EventArgs e)
         {
             FormAdmin = new FormAdmin(User, Repository);
@@ -49,12 +62,14 @@ namespace ISApteka
             FormAdmin.Show();
         }
 
+
         private void BuEdit_Click(object sender, EventArgs e)
         {
             FormCatalog = new FormCatalog(User, Repository, Mode.Edit);
             this.Hide();
             FormCatalog.Show();
         }
+
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {

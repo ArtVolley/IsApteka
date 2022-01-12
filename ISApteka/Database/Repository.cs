@@ -63,6 +63,39 @@ namespace ISApteka.Database
         }
 
 
+        public async Task<User> GetByIdFromUsers(int id)
+        {
+            try
+            {
+                await ConnectDataBase();
+                User user = new();
+                string query = $"select * from dbo.Users where Id = '{id}'";
+                SqlCommand command = new(query, Connection);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows == false)
+                {
+                    return null;
+                }
+                while (await reader.ReadAsync())
+                {
+                    user.Id = Convert.ToInt32(reader["Id"]);
+                    user.Login = reader["Login"].ToString();
+                    user.Password = reader["Password"].ToString();
+                    user.Role = (Role)Convert.ToInt32(reader["Role"]);
+                    user.Name = reader["Name"].ToString();
+                    user.Phone = reader["Phone"].ToString();
+                    user.Email = reader["Email"].ToString();
+                    user.Birth = reader["Birth"].ToString();
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
         public async Task<List<User>> GetAllFromUsers()
         {
             try
@@ -169,7 +202,6 @@ namespace ISApteka.Database
                 }
                 while (await reader.ReadAsync())
                 {
-                    var b = reader["BrandId"].ToString();
                     Medicine medicine = new()
                     {
                         Id = Convert.ToInt32(reader["Id"]),
@@ -357,7 +389,7 @@ namespace ISApteka.Database
             try
             {
                 await ConnectDataBase();
-                Store Brand = new();
+                Store store = new();
                 string query = $"select * from dbo.Store where MedicineId = {medicineId}";
                 SqlCommand command = new(query, Connection);
                 SqlDataReader reader = await command.ExecuteReaderAsync();
@@ -367,13 +399,13 @@ namespace ISApteka.Database
                 }
                 while (await reader.ReadAsync())
                 {
-                    Brand.Id = Convert.ToInt32(reader["Id"]);
-                    Brand.MedicineId = Convert.ToInt32(reader["MedicineId"]);
-                    Brand.Amount = Convert.ToInt32(reader["Amount"]);
-                    Brand.Cost = Convert.ToDouble(reader["Cost"]);
-                    Brand.Place = reader["Place"].ToString();
+                    store.Id = Convert.ToInt32(reader["Id"]);
+                    store.MedicineId = Convert.ToInt32(reader["MedicineId"]);
+                    store.Amount = Convert.ToInt32(reader["Amount"]);
+                    store.Cost = Convert.ToDouble(reader["Cost"]);
+                    store.Place = reader["Place"].ToString();
                 }
-                return Brand;
+                return store;
             }
             catch (Exception ex)
             {
@@ -510,10 +542,9 @@ namespace ISApteka.Database
         {
             try
             {
-                var date = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy");
                 await ConnectDataBase();
                 string query = $"UPDATE dbo.Orders SET " +
-                    $"Date='{date}', TotalCost={order.TotalCost.ToString().Replace(",", ".")}, " +
+                    $"Date='{order.Date}', TotalCost={order.TotalCost.ToString().Replace(",", ".")}, " +
                     $"IsPassed={order.IsPassed}, UserId={order.UserId} " +
                     $"WHERE Id={order.Id}";
                 SqlCommand command = new(query, Connection);
@@ -523,6 +554,29 @@ namespace ISApteka.Database
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+
+        public async Task<Order> GetByIdFormOrders(int id)
+        {
+            await ConnectDataBase();
+            Order order = new();
+            string query = $"select * from dbo.Orders where Id = {id}";
+            SqlCommand command = new(query, Connection);
+            SqlDataReader reader = await command.ExecuteReaderAsync();
+            if (reader.HasRows == false)
+            {
+                return null;
+            }
+            while (await reader.ReadAsync())
+            {
+                order.Id = Convert.ToInt32(reader["Id"]);
+                order.UserId = Convert.ToInt32(reader["UserId"]);
+                order.IsPassed = Convert.ToInt32(reader["IsPassed"]);
+                order.Date = reader["Date"].ToString();
+                order.TotalCost = Convert.ToDouble(reader["TotalCost"].ToString().Replace(".", ","));
+            }
+            return order;
         }
         #endregion
 
@@ -556,6 +610,41 @@ namespace ISApteka.Database
                     $"Amount={orderInfo.Amount}, Cost={orderInfo.Cost.ToString().Replace(",", ".")} WHERE Id={orderInfo.Id}";
                 SqlCommand command = new(query, Connection);
                 await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task<List<OrderInfo>> GetAllFromOrderInfo()
+        {
+            try
+            {
+                await ConnectDataBase();
+                List<OrderInfo> orderInfos = new();
+                string query = $"select* from dbo.OrderInfo";
+                SqlCommand command = new(query, Connection);
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows == false)
+                {
+                    return orderInfos;
+                }
+                while (await reader.ReadAsync())
+                {
+                    OrderInfo orderInfo = new()
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        OrderId = Convert.ToInt32(reader["OrderId"]),
+                        MedicineId = Convert.ToInt32(reader["MedicineId"]),
+                        Amount = Convert.ToInt32(reader["Amount"]),
+                        Cost = Convert.ToDouble(reader["Cost"])
+                    };
+                    orderInfos.Add(orderInfo);
+                }
+                return orderInfos;
             }
             catch (Exception ex)
             {

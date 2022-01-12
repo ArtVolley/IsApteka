@@ -64,16 +64,60 @@ namespace ISApteka
 
         private async void BuConfirm_Click(object sender, EventArgs e)
         {
-            if (Mode == Mode.Add)
+            if (IsValid())
             {
-                await CreateMedicine();
+                if (Mode == Mode.Add)
+                {
+                    await CreateMedicine();
+                }
+                else if (Mode == Mode.Edit)
+                {
+                    await UpdateMedicine(MedicineId);
+                }
+                await FormCatalog.DataBinding();
+                this.Hide();
             }
-            else if (Mode == Mode.Edit)
+        }
+
+
+        public bool IsValid()
+        {
+            bool isValid = true;
+            int total;
+            double cost;
+            var validCost = double.TryParse(teCost.Text.Trim(), out cost);
+            var validTotal = int.TryParse(teTotal.Text.Trim(), out total);
+
+            string text = "";
+            // total, name, form, cost null check
+            if (teTotal.Text.Trim() == "" ||
+                teName.Text.Trim() == "" ||
+                teForm.Text.Trim() == "" ||
+                teCost.Text.Trim() == "")
             {
-                await UpdateMedicine(MedicineId);
+                isValid = false;
+                text += "Заполните обязательные поля!\nОни указаны звездочкой\n";
             }
-            await FormCatalog.DataBinding();
-            this.Hide();
+            // cost, total number check
+            if (!validCost || !validTotal)
+            {
+                isValid = false;
+                text += "Заполните поля корректно\nЦена и количество на складе - положительные числа\n";
+            }
+            // cost, total >0 check
+            if (validCost || validTotal)
+            {
+                if (total < 0 || cost <=0)
+                {
+                    isValid = false;
+                    text += "Заполните поля корректно\nЦена и количество на складе - положительные числа\n";
+                }
+            }
+            if (isValid == false)
+            {
+                MessageBox.Show(text);
+            }
+            return isValid;
         }
 
 
@@ -147,7 +191,7 @@ namespace ISApteka
                 {
                     coBrand.Items.Add(new Item() { Text = brand.Name, Value = brand.Id });
                 }
-
+                coBrand.SelectedItem = coBrand.Items[0];
                 // edit or read
                 if (Mode != Mode.Add)
                 {
@@ -159,7 +203,7 @@ namespace ISApteka
                     teForm.Text = Medicine.Form;
                     teComposition.Text = Medicine.Composition;
                     teInstruction.Text = Medicine.Instruction;
-                    teDescription.Text = Medicine.Description;                
+                    teDescription.Text = Medicine.Description;    
                     chIsPrescription.Checked = Medicine.IsPrescription;
 
                     var hasTotal = false;

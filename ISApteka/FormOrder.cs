@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace ISApteka
         private List<OrderInfo> OrderInfos { get; set; }
         private int OrderId { get; set; }
         private bool IsAmountValid = true;
+        private Order Order { get; set; }
 
 
         public FormOrder(User user, Repository repository, FormCatalog formCatalog, List<MedicineCatalog> medicines)
@@ -54,8 +57,41 @@ namespace ISApteka
                 await UpdateOrder();
                 MessageBox.Show("Заказ прошел успешно!");
                 await FormCatalog.DataBinding();
+                await GenerateCheck();
                 this.Hide();
             }
+        }
+
+
+        private async Task GenerateCheck()
+        {
+            string text = $"----------------------------------------------------------\n" +
+                          $"                       Кассовый чек                       \n" +
+                          $"Приход\n" +
+                          $"ООО 'Аптека'\n" +
+                          $"ИНН 12345678\n" +
+                          $"123456, г.Москва, ул. Ленина, 10\n" +
+                          $"Фармацевт : {User.Name}\n" +
+                          $"----------------------------------------------------------\n";
+                         
+                         
+            foreach (var medicineGrid in MedicineGrids)
+            {
+                text += $"{medicineGrid.Name.Trim()} * {medicineGrid.Amount}\n";
+                text += $"{medicineGrid.Cost} * {medicineGrid.Amount} ={medicineGrid.TotalCost}\n";
+            }
+            text += $"----------------------------------------------------------\n" +
+                    $"ИТОГ\n" +
+                    $"={Order.TotalCost}\n" +
+                    $"----------------------------------------------------------\n" +
+                    $"                   {Order.Date}\n" +
+                    $"----------------------------------------------------------\n";
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string check = Path.Combine(docPath, "Check.txt");
+
+            File.WriteAllText(check, text);
+
+            Process.Start("notepad.exe", check);
         }
 
 
@@ -65,7 +101,8 @@ namespace ISApteka
             // update order info
             foreach (var medicineGrid in MedicineGrids)
             {
-                totalCost += medicineGrid.TotalCost;
+                //totalCost += medicineGrid.TotalCost;
+                totalCost = (double)(Convert.ToDecimal(medicineGrid.TotalCost) + Convert.ToDecimal(totalCost));
                 foreach (var orderInfo in OrderInfos)
                 {
                     if (medicineGrid.Id == orderInfo.MedicineId)
@@ -80,14 +117,15 @@ namespace ISApteka
                 await Repository.UpdateAmountByMedicineIdIntoStore(medicineGrid.Id, newAmount);
             }
             // update order
-            var order = new Order()
+            Order = new Order()
             {
                 Id = OrderId,
                 TotalCost = totalCost,
                 IsPassed = 1,
-                UserId = User.Id
+                UserId = User.Id,
+                Date = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy")
             };
-            await Repository.UpdateIntoOrders(order);
+            await Repository.UpdateIntoOrders(Order);
         }
 
 
@@ -208,7 +246,7 @@ namespace ISApteka
         private void dataGridOrder_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // -
-            if (e.ColumnIndex == 0)
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
             {
                 // validation
                 if (Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[6].Value) <= 1)
@@ -227,7 +265,7 @@ namespace ISApteka
                 }
             }
             // +
-            if (e.ColumnIndex == 1)
+            if (e.ColumnIndex == 1 && e.RowIndex >= 0)
             {
                 // validation
                 if (Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[6].Value) >= 

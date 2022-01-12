@@ -49,9 +49,42 @@ namespace ISApteka
             Task.Run(() => this.GridParameters()).Wait();
             buOrder.Click += BuOrder_Click;
             buAdd.Click += BuAdd_Click;
+            buSearch.Click += BuSearch_Click;
             FormClosed += FormCatalog_FormClosed;
         }
 
+        private void BuSearch_Click(object sender, EventArgs e)
+        {
+            string searchValue = teSearch.Text;
+            dataGridMedicines.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            try
+            {
+                bool valueResult = false;
+                foreach (DataGridViewRow row in dataGridMedicines.Rows)
+                {
+                    for (int i = 0; i < row.Cells.Count; i++)
+                    {
+                        if (row.Cells[i].Value != null && row.Cells[i].Value.ToString().Equals(searchValue))
+                        {
+                            int rowIndex = row.Index;
+                            dataGridMedicines.Rows[rowIndex].Selected = true;
+                            valueResult = true;
+                            break;
+                        }
+                    }
+
+                }
+                if (!valueResult)
+                {
+                    MessageBox.Show("Unable to find " + teSearch.Text, "Not Found");
+                    return;
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+        }
 
         private void BuAdd_Click(object sender, EventArgs e)
         {

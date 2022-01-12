@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ISApteka.Entities.Enums;
@@ -50,16 +51,67 @@ namespace ISApteka
 
         private async void BuConfirm_Click(object sender, EventArgs e)
         {
-            if (Mode == Mode.Add)
+            if (IsValid())
             {
-                await CreateUser();
+                if (Mode == Mode.Add)
+                {
+                    await CreateUser();
+                }
+                else if (Mode == Mode.Edit)
+                {
+                    await UpdateUser(User.Id);
+                }
+                await FormAdmin.DataBinding();
+                this.Hide();
             }
-            else if (Mode == Mode.Edit)
+        }
+
+        public bool IsValid()
+        {
+            bool isValid = true;
+            bool isValidCorrect = true;
+
+            string text = "";
+            // login, name, password null check
+            if (teLogin.Text.Trim() == "" ||
+                teName.Text.Trim() == "" ||
+                tePass.Text.Trim() == "")
             {
-                await UpdateUser(User.Id);
+                isValid = false;
+                text += "Заполните обязательные поля!\nОни указаны звездочкой\n";
             }
-            await FormAdmin.DataBinding();
-            this.Hide();
+            // phone check
+            if (tePhone.Text.Trim() != "")
+            {
+                if (!Regex.Match(tePhone.Text, "^[0-9]+$").Success)
+                {
+                    isValidCorrect = false;
+                }
+            }
+            // email check
+            if (teEmail.Text.Trim() != "")
+            {
+                if (!Regex.Match(teEmail.Text, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").Success)
+                {
+                    isValidCorrect = false;
+                }
+            }
+            if (!isValidCorrect)
+            {
+                isValid = false;
+                text += "Заполните поля корректно\nТелефон - только цифры\nEmail - формат почты (example@example.ru)\n";
+            }
+            // birth 18 check
+            if (daBirth.Value > DateTime.Now.AddYears(-18))
+            {
+                isValid = false;
+                text += "\nСотрудник должен быть старше 18\n";
+            }
+            if (isValid == false)
+            {
+                MessageBox.Show(text);
+            }
+            return isValid;
         }
 
 
