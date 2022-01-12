@@ -22,7 +22,7 @@ namespace ISApteka
         private FormOrder FormOrder { get; set; }
         private FormMedicine FormMedicine { get; set; }
         private List<MedicineCatalog> MedicineGrids { get; set; }
-        private DataTable DataTable { get; set; } = new();
+        private DataTable DataTable { get; set; }
         private Repository Repository { get; set; }
         private  Mode Mode { get; set; }
 
@@ -173,6 +173,7 @@ namespace ISApteka
             // take medicines
             Stores = await Repository.GetAllFromStores();
             MedicineGrids = new List<MedicineCatalog>();
+            DataTable = new();
             // convert medicines that have store
             foreach (var store in Stores)
             {

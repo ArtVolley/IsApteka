@@ -79,7 +79,7 @@ namespace ISApteka
             // 
             // teSearch
             // 
-            this.teSearch.Location = new System.Drawing.Point(13, 555);
+            this.teSearch.Location = new System.Drawing.Point(13, 553);
             this.teSearch.Name = "teSearch";
             this.teSearch.PlaceholderText = "Наименование";
             this.teSearch.Size = new System.Drawing.Size(224, 23);
