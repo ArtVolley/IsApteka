@@ -80,13 +80,18 @@ namespace ISApteka
         // order
         private void BuOrder_Click(object sender, EventArgs e)
         {
+            List<string> prescriptionNames = new();
             List<MedicineCatalog> addedMedicines = new();
             // find added medicines
             for (int i = 0; i < DataTable.Rows.Count; i++)
             {            
                 if (Convert.ToBoolean(DataTable.Rows[i].ItemArray[6].ToString()) == true)
                 {
-                    addedMedicines.Add(MedicineGrids[i]);                    
+                    addedMedicines.Add(MedicineGrids[i]);   
+                    if (Convert.ToBoolean(DataTable.Rows[i].ItemArray[4].ToString()) == true)
+                    {
+                        prescriptionNames.Add(DataTable.Rows[i].ItemArray[1].ToString());
+                    }
                 }
             }
             if (addedMedicines.Count < 1)
@@ -95,6 +100,15 @@ namespace ISApteka
             }
             else
             {
+                if (prescriptionNames.Count > 0)
+                {
+                    string text = "Обязательно!\nСпросите рецепт на лекарственные средства:\n";
+                    foreach (var name in prescriptionNames)
+                    {
+                        text += $"{name}\n";
+                    }
+                    MessageBox.Show(text);
+                }
                 FormOrder = new FormOrder(User, Repository, this, addedMedicines);
                 FormOrder.Show();
             }

@@ -223,8 +223,8 @@ namespace ISApteka
             buMinus.Text = "-";
             buMinus.UseColumnTextForButtonValue = true;
             buMinus.FlatStyle = FlatStyle.Flat;
-            buMinus.DefaultCellStyle.BackColor = Color.Black;
-            buMinus.DefaultCellStyle.ForeColor = Color.White;
+            buMinus.DefaultCellStyle.BackColor = Color.LightPink;
+            buMinus.DefaultCellStyle.ForeColor = Color.Black;
             dataGridOrder.Columns.Add(buMinus);
 
             // button +
@@ -233,8 +233,8 @@ namespace ISApteka
             buPlus.Name = "buPlus";
             buPlus.Text = "+";
             buPlus.FlatStyle = FlatStyle.Flat;
-            buPlus.DefaultCellStyle.BackColor = Color.Black;
-            buPlus.DefaultCellStyle.ForeColor = Color.White;
+            buPlus.DefaultCellStyle.BackColor = Color.LightBlue;
+            buPlus.DefaultCellStyle.ForeColor = Color.Black;
             buPlus.UseColumnTextForButtonValue = true;
             dataGridOrder.Columns.Add(buPlus);
 
