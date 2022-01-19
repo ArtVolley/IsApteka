@@ -69,7 +69,7 @@ namespace ISApteka
             this.Font = new System.Drawing.Font("Segoe UI Semilight", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "FormAdmin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "АДМИНКА";
+            this.Text = "АДМИНИСТРАЦИОННАЯ ПАНЕЛЬ";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridUsers)).EndInit();
             this.ResumeLayout(false);
 

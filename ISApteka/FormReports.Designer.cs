@@ -64,7 +64,7 @@ namespace ISApteka
             this.MinimumSize = new System.Drawing.Size(416, 409);
             this.Name = "FormReports";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FormReports";
+            this.Text = "ОТЧЕТЫ";
             this.ResumeLayout(false);
 
         }

@@ -240,6 +240,15 @@ namespace ISApteka
 
 
             dataGridOrder.Columns["Id"].Visible = false;
+
+            // total cost
+            double totalCost = 0;
+            foreach (var medicineGrid in MedicineGrids)
+            {
+                //totalCost += medicineGrid.TotalCost;
+                totalCost = (double)(Convert.ToDecimal(medicineGrid.TotalCost) + Convert.ToDecimal(totalCost));
+            }
+            laTotalCost.Text = $"ИТОГ: {totalCost} руб";
         }
 
 
@@ -252,7 +261,7 @@ namespace ISApteka
                 if (Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[6].Value) <= 1)
                 {
                     IsAmountValid = false;
-                    MessageBox.Show("Меньше нельзя)");
+                    MessageBox.Show("Количество должно быть больше 0");
                 }
                 else
                 {
@@ -262,6 +271,14 @@ namespace ISApteka
                     MedicineGrids.Find(x => x.Id == id).Amount -= 1;
                     dataGridOrder.UpdateCellValue(6, e.RowIndex);
                     dataGridOrder.UpdateCellValue(8, e.RowIndex);
+                    // total cost update
+                    double totalCost = 0;
+                    foreach (var medicineGrid in MedicineGrids)
+                    {
+                        //totalCost += medicineGrid.TotalCost;
+                        totalCost = (double)(Convert.ToDecimal(medicineGrid.TotalCost) + Convert.ToDecimal(totalCost));
+                    }
+                    laTotalCost.Text = $"ИТОГ: {totalCost} руб";
                 }
             }
             // +
@@ -272,7 +289,7 @@ namespace ISApteka
                     Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[5].Value))
                 {
                     IsAmountValid = false;
-                    MessageBox.Show("Больше нельзя)");
+                    MessageBox.Show("Количество не может быть больше количества на складе");
                 }
                 else
                 {
@@ -282,6 +299,14 @@ namespace ISApteka
                     MedicineGrids.Find(x => x.Id == id).Amount += 1;
                     dataGridOrder.UpdateCellValue(6, e.RowIndex);
                     dataGridOrder.UpdateCellValue(8, e.RowIndex);
+                    // total cost update
+                    double totalCost = 0;
+                    foreach (var medicineGrid in MedicineGrids)
+                    {
+                        //totalCost += medicineGrid.TotalCost;
+                        totalCost = (double)(Convert.ToDecimal(medicineGrid.TotalCost) + Convert.ToDecimal(totalCost));
+                    }
+                    laTotalCost.Text = $"ИТОГ: {totalCost} руб";
                 }
             }
         }
@@ -297,17 +322,25 @@ namespace ISApteka
                     Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[5].Value))
                 {
                     IsAmountValid = false;
-                    MessageBox.Show("Больше нельзя)");
+                    MessageBox.Show("Количество не может быть больше количества на складе");
                 }
                 else if (Convert.ToInt32(dataGridOrder.Rows[e.RowIndex].Cells[6].Value) <= 1)
                 {
                     IsAmountValid = false;
-                    MessageBox.Show("Меньше нельзя)");
+                    MessageBox.Show("Количество должно быть больше 0");
                 }
                 else
                 {
                     IsAmountValid = true;
                     dataGridOrder.UpdateCellValue(8, e.RowIndex);
+                    // total cost update
+                    double totalCost = 0;
+                    foreach (var medicineGrid in MedicineGrids)
+                    {
+                        //totalCost += medicineGrid.TotalCost;
+                        totalCost = (double)(Convert.ToDecimal(medicineGrid.TotalCost) + Convert.ToDecimal(totalCost));
+                    }
+                    laTotalCost.Text = $"ИТОГ: {totalCost} руб";
                 }
             }
         }

@@ -31,6 +31,7 @@ namespace ISApteka
         {
             this.dataGridOrder = new System.Windows.Forms.DataGridView();
             this.buOrder = new System.Windows.Forms.Button();
+            this.laTotalCost = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridOrder)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,12 +61,22 @@ namespace ISApteka
             this.buOrder.Text = "ПРОВЕСТИ ОПЛАТУ";
             this.buOrder.UseVisualStyleBackColor = true;
             // 
+            // laTotalCost
+            // 
+            this.laTotalCost.AutoSize = true;
+            this.laTotalCost.Location = new System.Drawing.Point(12, 619);
+            this.laTotalCost.Name = "laTotalCost";
+            this.laTotalCost.Size = new System.Drawing.Size(42, 15);
+            this.laTotalCost.TabIndex = 2;
+            this.laTotalCost.Text = "ИТОГ: ";
+            // 
             // FormOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1282, 661);
+            this.Controls.Add(this.laTotalCost);
             this.Controls.Add(this.buOrder);
             this.Controls.Add(this.dataGridOrder);
             this.Font = new System.Drawing.Font("Segoe UI Semilight", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -74,6 +85,7 @@ namespace ISApteka
             this.Text = "ЗАКАЗ";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridOrder)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -81,5 +93,6 @@ namespace ISApteka
 
         private System.Windows.Forms.DataGridView dataGridOrder;
         private System.Windows.Forms.Button buOrder;
+        private System.Windows.Forms.Label laTotalCost;
     }
 }

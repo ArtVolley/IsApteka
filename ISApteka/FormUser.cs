@@ -31,6 +31,7 @@ namespace ISApteka
             FormAdmin = formAdmin;
             User = user;
             Mode = mode;
+            buDelete.Visible = false;
 
             if (Mode == Mode.Add)
             {
@@ -78,12 +79,12 @@ namespace ISApteka
                 tePass.Text.Trim() == "")
             {
                 isValid = false;
-                text += "Заполните обязательные поля!\nОни указаны звездочкой\n";
+                text += "Заполните обязательные поля!\nОни указаны звездочкой.\n";
             }
             // phone check
             if (tePhone.Text.Trim() != "")
             {
-                if (!Regex.Match(tePhone.Text, "^[0-9]+$").Success)
+                if (!Regex.Match(tePhone.Text.Trim(), "^[0-9]+$").Success)
                 {
                     isValidCorrect = false;
                 }
@@ -91,7 +92,7 @@ namespace ISApteka
             // email check
             if (teEmail.Text.Trim() != "")
             {
-                if (!Regex.Match(teEmail.Text, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").Success)
+                if (!Regex.Match(teEmail.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").Success)
                 {
                     isValidCorrect = false;
                 }
@@ -99,13 +100,13 @@ namespace ISApteka
             if (!isValidCorrect)
             {
                 isValid = false;
-                text += "Заполните поля корректно\nТелефон - только цифры\nEmail - формат почты (example@example.ru)\n";
+                text += "Заполните поля корректно!\nТелефон - только цифры\nEmail - формат почты (example@example.ru).\n";
             }
             // birth 18 check
             if (daBirth.Value > DateTime.Now.AddYears(-18))
             {
                 isValid = false;
-                text += "\nСотрудник должен быть старше 18\n";
+                text += "Сотрудник должен быть старше 18!\n";
             }
             if (isValid == false)
             {

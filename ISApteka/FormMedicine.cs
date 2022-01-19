@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ISApteka.Entities.Enums;
@@ -36,7 +37,9 @@ namespace ISApteka
             Stores = formCatalog.Stores;
             Mode = mode;
             MedicineId = medicineId;
-            
+
+            buDelete.Visible = false;
+
             //  buttons
             if (Mode == Mode.Read)
             {
@@ -83,6 +86,7 @@ namespace ISApteka
         public bool IsValid()
         {
             bool isValid = true;
+            bool isValidCorrect = true;
             int total;
             double cost;
             var validCost = double.TryParse(teCost.Text.Trim(), out cost);
@@ -96,22 +100,37 @@ namespace ISApteka
                 teCost.Text.Trim() == "")
             {
                 isValid = false;
-                text += "Заполните обязательные поля!\nОни указаны звездочкой\n";
+                text += "Заполните обязательные поля!\nОни указаны звездочкой.\n";
             }
-            // cost, total number check
-            if (!validCost || !validTotal)
+            if (teTotal.Text.Trim() != "" ||
+                teCost.Text.Trim() != "")
+            {
+                // cost, total number check
+                if (!validCost || !validTotal)
+                {
+                    isValidCorrect = false;
+                }
+                // cost, total >0 check
+                if (validCost || validTotal)
+                {
+                    if (total < 0 || cost <=0)
+                    {
+                        isValidCorrect = false;
+                    }
+                }
+                // email check
+                if (teCost.Text.Trim() != "")
+                {
+                    if (!Regex.Match(teCost.Text, @"^\d{0,8}(\.\d{0,2})?$").Success)
+                    {
+                        isValidCorrect = false;
+                    }
+                }
+            }
+            if (!isValidCorrect)
             {
                 isValid = false;
-                text += "Заполните поля корректно\nЦена и количество на складе - положительные числа\n";
-            }
-            // cost, total >0 check
-            if (validCost || validTotal)
-            {
-                if (total < 0 || cost <=0)
-                {
-                    isValid = false;
-                    text += "Заполните поля корректно\nЦена и количество на складе - положительные числа\n";
-                }
+                text = "Заполните поля корректно!\nЦена и количество на складе - положительные числа.";
             }
             if (isValid == false)
             {
